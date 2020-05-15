@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/mnt/c/Users/chchc/Documents/projects/dm-course-project/backend/venv/bin/python",
+    "python.pythonPath": "./backend/venv/bin/python",
     "python.linting.enabled": true,
     "python.linting.pylintEnabled": true,
     "python.linting.pycodestyleEnabled": false
