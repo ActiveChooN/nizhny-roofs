@@ -9,6 +9,6 @@ Client part was written on React JS library. Also MongoDB was used for DB purpos
 
 
 ## Authors
-- Dmitry Kalinin
-- Dmitry Zholobov
-- Ekaterina Kasko
+- [Dmitry Kalinin](https://github.com/ActiveChooN)
+- [Dmitry Zholobov](https://github.com/DimaZholobov)
+- [Ekaterina Kasko](https://github.com/cath-syngee)
