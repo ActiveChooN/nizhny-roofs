@@ -1,6 +1,6 @@
 from flask import current_app
 from application import app
-from flask_restplus.reqparse import RequestParser
+from flask_restx.reqparse import RequestParser
 with app.app_context():
     config = app.config
 

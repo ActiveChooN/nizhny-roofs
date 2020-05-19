@@ -5,16 +5,12 @@ import { Formik, Form, Field } from 'formik';
 import Button from '@material-ui/core/Button/Button';
 import Grid from '@material-ui/core/Grid/Grid';
 import Link from '@material-ui/core/Link/Link';
+import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
-import { authenticationSucceed } from '../../store/slices/auth';
-
-interface inputValues {
-    email: string;
-    password: string;
-    remember: boolean;
-}
+import {login} from '../../store/actions/auth';
+import {showErrorSuccessMessageOnFetch} from '../../store/slices/alertMessage';
 
 const defaultInputValues = {
     email: '',
@@ -55,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
             backgroundColor: theme.palette.secondary.light,
         },
     },
+    circular: {
+        marginRight: theme.spacing(1),
+    },
 }))
 
 const LoginForm = () => {
@@ -67,9 +66,14 @@ const LoginForm = () => {
             initialValues={defaultInputValues}
             validate={formValidator}
             onSubmit={(values, {setSubmitting}) => {
-                dispatch(authenticationSucceed({authToken: '', refreshToken: ''}));
-                setSubmitting(false);
-                history.push('/');
+                dispatch(showErrorSuccessMessageOnFetch(
+                    login(values.email, values.password)
+                        .then(() => {history.push('/')})
+                        .catch((e) => {
+                            setSubmitting(false);
+                            throw e;
+                        }), false
+                ));
             }}
         >
             {({submitForm, isSubmitting}): JSX.Element => (
@@ -104,6 +108,7 @@ const LoginForm = () => {
                         disabled={isSubmitting}
                         fullWidth
                     >
+                        {isSubmitting && (<CircularProgress size={16} className={classes.circular}/>)}
                         Войти
                     </Button>
                     <Grid container>

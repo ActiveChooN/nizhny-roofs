@@ -5,6 +5,7 @@ from flask_mail import Mail
 from flask_caching import Cache
 from flask_jwt_extended import JWTManager
 from flask_redis import FlaskRedis
+import flask_fs as fs
 from flask_rbac import RBAC
 from config import config
 from celery import Celery
@@ -19,6 +20,11 @@ jwt = JWTManager()
 redis = FlaskRedis()
 # rbac = RBAC()
 
+storages = {
+    "avatars": fs.Storage("avatars", fs.IMAGES),
+    "images": fs.Storage("images", fs.IMAGES),
+}
+
 
 def create_app(config_name):
     app.config.from_object(config[config_name])
@@ -31,6 +37,7 @@ def create_app(config_name):
     jwt.init_app(app)
     redis.init_app(app)
     # rbac.init_app(app)
+    fs.init_app(app, *storages.values())
 
     TaskBase = celery.Task
 

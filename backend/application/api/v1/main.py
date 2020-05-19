@@ -1,5 +1,5 @@
 from flask import jsonify
-from flask_restplus import Resource
+from flask_restx import Resource
 from flask_jwt_extended import jwt_required
 from application import cache
 from application.tasks.main import simple_task

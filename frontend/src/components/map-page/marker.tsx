@@ -5,7 +5,8 @@ import makeStyles from '@material-ui/core/styles/makeStyles';
 import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
 import Button from '@material-ui/core/Button/Button';
-import Rating from '@material-ui/lab/Rating/Rating'
+import Rating from '@material-ui/lab/Rating/Rating';
+import Image from 'material-ui-image';
 
 export const pointerIcon = new L.Icon({
     iconUrl: 'assets/MarkerIcon.svg',
@@ -51,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
         margin: '0 !important',
     },
     moreButton: {
-        paddingLeft: theme.spacing(1),
+        padding: theme.spacing(1),
     }
 }))
 
@@ -72,7 +73,7 @@ const LeafletMarker = (props: MarkerProps): JSX.Element => {
             <Popup className={classes.popup}>
                 <Grid container spacing={1}>
                     <Grid item className={classes.image}>
-                        <img className={classes.img} alt='complex' src='/assets/old_building.jpg' />
+                        <Image className={classes.img} src='/assets/old_building.jpg' />
                     </Grid>
                     <Grid item xs container direction='column' spacing={1}>
                         <Grid item xs>
@@ -83,7 +84,7 @@ const LeafletMarker = (props: MarkerProps): JSX.Element => {
                             {description}
                             </Typography>
                         </Grid>
-                        <Grid item container spacing={1}>
+                        <Grid item container spacing={1} alignItems='center'>
                             <Grid item>
                                 <Rating value={rating} precision={0.5} defaultValue={0} readOnly />
                             </Grid>

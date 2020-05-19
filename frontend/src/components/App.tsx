@@ -9,6 +9,7 @@ import MapPage from './map-page/map-page';
 import LoginPage from './login-page/login-page';
 import RegisterPage from './register-page/register-page';
 import theme from './shared/theme';
+import AlertProvider from "./shared/alert";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route exact path="/register" component={RegisterPage}/>
             <Route exact path="/roof/:id" component={LoginPage}/>
           </Switch>
+          <AlertProvider />
         </ThemeProvider>
       </Router>
     </Provider>

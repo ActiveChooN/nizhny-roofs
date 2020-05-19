@@ -14,7 +14,7 @@ if os.environ.get('FLASK_COVERAGE'):
 import sys
 from flask_script import Manager
 from application import create_app
-from application.models import User
+from application.models import User, Roof
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
@@ -22,7 +22,7 @@ manager = Manager(app)
 
 @manager.shell
 def make_shell_context():
-    return dict(User=User)
+    return dict(User=User, Roof=Roof)
 
 
 @manager.command

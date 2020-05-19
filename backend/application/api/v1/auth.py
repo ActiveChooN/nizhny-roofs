@@ -1,6 +1,6 @@
-from flask_restplus import Resource, Namespace, reqparse, fields, abort
-from flask_restplus._http import HTTPStatus
-from flask_restplus.inputs import email
+from flask_restx import Resource, Namespace, reqparse, fields, abort
+from flask_restx._http import HTTPStatus
+from flask_restx.inputs import email
 from flask_jwt_extended import create_access_token, create_refresh_token, \
     jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt
 from application import app, jwt, redis
@@ -14,8 +14,8 @@ auth_ns = Namespace("Authentication", path="/token",
 # Parsers
 
 auth_parser = reqparse.RequestParser()
-auth_parser.add_argument("username", type=str, required=True, location="json",
-                         help="Username cannot be empty.")
+auth_parser.add_argument("email", type=email(), required=True, location="json",
+                         help="Email cannot be empty.")
 auth_parser.add_argument("password", type=str, required=True, location="json",
                          help="Password cannot be empty.")
 
@@ -37,8 +37,7 @@ refresh_token_model = auth_ns.model("RefreshToken", {
 
 @jwt.user_loader_callback_loader
 def user_loader_callback(identity):
-    # TODO: implement
-    return identity
+    return User.objects.get(id=identity)
 
 
 @jwt.token_in_blacklist_loader
@@ -55,16 +54,16 @@ def check_if_token_is_revoked(decrypted_token):
 
 
 @auth_ns.route("")
-@auth_ns.expect(auth_parser)
 class Token(Resource):
+    @auth_ns.expect(auth_parser)
     @auth_ns.marshal_with(token_model)
     def post(self):
         args = auth_parser.parse_args()
-        user = User.objects.get_or_404(username=args["username"])
+        user = User.objects.get_or_404(email=args["email"])
         if not user.verify_password(args["password"]):
             abort(HTTPStatus.UNAUTHORIZED)
-        access_token = create_access_token(identity=args["username"])
-        refresh_token = create_refresh_token(identity=args["username"])
+        access_token = create_access_token(identity=str(user.id))
+        refresh_token = create_refresh_token(identity=str(user.id))
 
         return {
             "access_token": access_token,
@@ -77,8 +76,8 @@ class TokenRefresh(Resource):
     @jwt_refresh_token_required
     @auth_ns.marshal_with(access_token_model)
     def post(self):
-        current_user_username = get_jwt_identity()
-        access_token = create_access_token(identity=current_user_username)
+        current_user_id = get_jwt_identity()
+        access_token = create_access_token(identity=current_user_id)
         return {
             "access_token": access_token
         }, 200

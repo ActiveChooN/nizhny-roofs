@@ -1,4 +1,4 @@
-from flask_restplus import fields
+from flask_restx import fields
 from . import api
 
 pagination_model = api.model("Pagination", {

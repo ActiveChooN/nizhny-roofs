@@ -1,11 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {Map, TileLayer, ZoomControl} from 'react-leaflet';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import 'leaflet/dist/leaflet.css';
 
+import {RootState} from '../../store';
 import AppBar from '../shared/app-bar';
 import Marker from './marker';
-import roofs from '../../mock_db/roofs';
+import {getRoofs} from '../../store/actions/roofs';
 
 const useStyles = makeStyles({
     map: {
@@ -15,6 +17,15 @@ const useStyles = makeStyles({
 
 const MapPage = () => {
     const classes = useStyles();
+    const dispatch = useDispatch();
+    const {
+        roofs,
+        isLoaded,
+    } = useSelector((state: RootState) => state.roofs);
+
+    useEffect(() => {
+        if (!isLoaded) dispatch(getRoofs());
+    }, [isLoaded, dispatch]);
 
     return (
         <>
@@ -33,7 +44,7 @@ const MapPage = () => {
                         lat={el.lat}
                         lng={el.lng}
                         description={el.description}
-                        title={el.title}
+                        title={el.name}
                         rating={el.rating}
                         key={el.id}
                     />

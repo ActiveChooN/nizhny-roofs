@@ -1,4 +1,5 @@
 import React from 'react';
+import {Redirect} from 'react-router-dom';
 import Container from '@material-ui/core/Container/Container';
 import Avatar from '@material-ui/core/Avatar/Avatar';
 import Typography from '@material-ui/core/Typography/Typography';
@@ -8,6 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import AppBar from '../shared/app-bar';
 import RegisterForm from './register-form';
 import Copyright from '../shared/copyright';
+import {useAuth} from '../../authProvider';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -27,6 +29,13 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginPage = () => {
     const classes = useStyles();
+    const [isAuthenticated] = useAuth();
+
+    if (isAuthenticated) {
+        return (
+            <Redirect to='/'/>
+        )
+    }
 
     return (
         <>

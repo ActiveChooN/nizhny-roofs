@@ -1,4 +1,6 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
+import {useHistory} from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import Button from '@material-ui/core/Button/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel/FormControlLabel';
@@ -7,12 +9,15 @@ import Grid from '@material-ui/core/Grid/Grid';
 import {TextField} from 'formik-material-ui';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
+import {showErrorSuccessMessageOnFetch} from '../../store/slices/alertMessage';
+import {register} from '../../api/auth';
+
 interface inputValues {
     email: string;
     password: string;
     passwordConfirmation: string,
     firstName: string;
-    secondName: string;
+    lastName: string;
 }
 
 const defaultInputValues = {
@@ -20,7 +25,7 @@ const defaultInputValues = {
     password: '',
     passwordConfirmation: '',
     firstName: '',
-    secondName: '',
+    lastName: '',
 }
 
 const formValidator = (values: any) => {
@@ -44,6 +49,12 @@ const formValidator = (values: any) => {
 
     if (!values.firstName) {
         errors.firstName = 'Поле обязательно'
+    } else if (!/[\w\dА-я]+/.test(values.firstName)) {
+        errors.firstName = 'Неверный формат имени'
+    }
+
+    if (!/[\w\dА-я]*/.test(values.lastName)) {
+        errors.lastName = 'Неверный формат фамилии'
     }
 
     return errors;
@@ -71,12 +82,23 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginForm = () => {
     const classes = useStyles();
+    const history = useHistory();
+    const dispatch = useDispatch();
 
     return (
         <Formik
             initialValues={defaultInputValues}
             validate={formValidator}
-            onSubmit={() => {}}
+            onSubmit={(values, {setSubmitting}) => {
+                dispatch(showErrorSuccessMessageOnFetch(
+                    register(values.email, values.password, values.firstName, values.lastName)
+                        .then(() => {history.push('/login')})
+                        .catch((e) => {
+                            setSubmitting(false);
+                            throw e;
+                        }), 'Вы успешно зарегистрировались!'
+                ));
+            }}
         >
             {({submitForm, isSubmitting}): JSX.Element => (
                 <Form className={classes.form}>
@@ -95,7 +117,7 @@ const LoginForm = () => {
                         <Grid item xs>
                             <Field
                                 component={TextField}
-                                name='secondName'
+                                name='lastName'
                                 type='text'
                                 label='Фамилия'
                                 variant='outlined'

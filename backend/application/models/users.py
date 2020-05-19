@@ -1,19 +1,26 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from application import db
+from mongoengine import StringField, EmailField, BooleanField
+from flask_fs.mongo import ImageField
+from application import storages
 
 
 class User(db.Document):
-    username = db.StringField(required=True)
-    password_hash = db.StringField(required=True)
-    email = db.EmailField()
-    name = db.StringField()
-    is_active = db.BooleanField(default=True)
+    email = EmailField(required=True, unique=True)
+    first_name = StringField(required=True)
+    last_name = StringField()
+    password_hash = StringField(required=True)
+    avatar = ImageField(fs=storages["avatars"], max_size=200)
+    is_active = BooleanField(default=True)
+    is_admin = BooleanField(default=False)
 
     def __init__(self, *args, **kwargs):
         if "password" in kwargs.keys():
             password = kwargs.pop("password")
+            super().__init__(*args, **kwargs)
             self.password = password
-        super().__init__(*args, **kwargs)
+        else:
+            super().__init__(*args, **kwargs)
 
     def update(self, *args, **kwargs):
         if "password" in kwargs.keys():

@@ -1,7 +1,8 @@
 {
-  "name": "frontend",
+  "name": "nr-frontend",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "license": "MIT",
   "dependencies": {
     "@material-ui/core": "^4.9.13",
     "@material-ui/icons": "^4.9.1",
@@ -23,12 +24,15 @@
     "formik-material-ui": "^2.0.0-beta.1",
     "history": "^4.10.1",
     "leaflet": "^1.6.0",
+    "material-ui-image": "^3.2.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-leaflet": "^2.7.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "react-token-auth": "^1.1.7",
+    "react-use": "^15.1.0",
     "typescript": "~3.8.2"
   },
   "scripts": {

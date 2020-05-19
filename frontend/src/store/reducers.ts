@@ -1,6 +1,8 @@
 import {combineReducers} from 'redux';
-import authReducer from './slices/auth'
+import alertMessageReducer from './slices/alertMessage';
+import roofsReducer from './slices/roofs';
 
 export default combineReducers({
-    auth: authReducer,
+    alertMessage: alertMessageReducer,
+    roofs: roofsReducer,
 });

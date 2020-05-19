@@ -9,7 +9,13 @@ class Config:
     APP_MAIN_ADMIN_PASS = os.environ.get("ADMIN_PASS")
     APP_NAME = os.environ.get("APP_NAME")
     APP_ROW_PER_PAGE = os.environ.get("APP_ROW_PER_PAGE") or 25
-    APP_HOSTNAME = os.environ.get("APP_HOSTNAME") or "http://localhost:5000/"
+    APP_HOSTNAME = os.environ.get("APP_HOSTNAME") or "localhost:5000"
+
+    MONGODB_DB = os.environ.get("MONGODB_DB")
+    MONGODB_HOST = os.environ.get("MONGODB_HOST")
+    MONGODB_PORT = int(os.environ.get("MONGODB_PORT"))
+    MONGODB_USERNAME = os.environ.get("MONGODB_USERNAME")
+    MONGODB_PASSWORD = os.environ.get("MONGODB_PASSWORD")
 
     MAIL_USERNAME = os.environ.get("APP_MAIL_USERNAME")
     MAIL_PASSWORD = os.environ.get("APP_MAIL_PASSWORD")
@@ -37,6 +43,14 @@ class Config:
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ["access", "refresh"]
 
+    FS_URL = os.environ.get("APP_HOSTNAME")
+    AVATARS_FS_URL = FS_URL + "/avatars"
+    AVATARS_FS_SERVE = True
+    AVATARS_FS_IMAGES_OPTIMIZE = True
+    IMAGES_FS_URL = FS_URL + "/images"
+    IMAGES_FS_SERVE = True
+    IMAGES_FS_IMAGES_OPTIMIZE = True
+
     @classmethod
     def init_app(cls, app):
         pass
@@ -52,7 +66,6 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get("PRODUCTION_DB")
     if os.environ.get("CACHE_REDIS_URL"):
         CACHE_TYPE = "redis"
         CACHE_REDIS_URL = os.environ.get("CACHE_REDIS_URL")
@@ -95,8 +108,6 @@ class UnixConfig(ProductionConfig):
 
 class HerokuConfig(ProductionConfig):
     SSL_REDIRECT = True if os.environ.get('DYNO') else False
-
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
     @classmethod
     def init_app(cls, app):
