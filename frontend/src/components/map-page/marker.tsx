@@ -6,7 +6,15 @@ import Typography from '@material-ui/core/Typography/Typography';
 import Grid from '@material-ui/core/Grid/Grid';
 import Button from '@material-ui/core/Button/Button';
 import Rating from '@material-ui/lab/Rating/Rating';
+import Card from '@material-ui/core/Card/Card';
+import CardHeader from '@material-ui/core/CardHeader/CardHeader';
+import CardContent from '@material-ui/core/CardContent/CardContent';
+import CardActions from '@material-ui/core/CardActions/CardActions';
+import Avatar from '@material-ui/core/Avatar/Avatar';
 import Image from 'material-ui-image';
+import red from '@material-ui/core/colors/red';
+import Moment from 'react-moment';
+import 'moment/locale/ru';
 
 export const pointerIcon = new L.Icon({
     iconUrl: 'assets/MarkerIcon.svg',
@@ -26,7 +34,14 @@ interface MarkerProps {
     title: string;
     description: string;
     rating?: number;
-};
+    comment?: {
+        author_name: string;
+        author_avatar: string;
+        date: string;
+        text: string;
+        rating: number;
+    }
+}
 
 const useStyles = makeStyles((theme) => ({
     popup: {
@@ -53,6 +68,20 @@ const useStyles = makeStyles((theme) => ({
     },
     moreButton: {
         padding: theme.spacing(1),
+    },
+    avatar: {
+        backgroundColor: red[500],
+    },
+    cardHeader: {
+        paddingRight: 0,
+        paddingLeft: 0,
+    },
+    cardContent: {
+        paddingTop: 0,
+        paddingBottom: 0,
+        '& p': {
+            margin: 0,
+        },
     }
 }))
 
@@ -64,6 +93,7 @@ const LeafletMarker = (props: MarkerProps): JSX.Element => {
         title,
         description,
         rating,
+        comment,
     } = props;
 
     const classes = useStyles();
@@ -96,6 +126,29 @@ const LeafletMarker = (props: MarkerProps): JSX.Element => {
                         </Grid>
                     </Grid>
                 </Grid>
+                { comment && (
+                    <Card elevation={0}>
+                        <CardHeader
+                            avatar={
+                                comment.author_avatar ? (
+                                    <Avatar src={comment.author_avatar} />
+                                ) : (
+                                    <Avatar className={classes.avatar}>
+                                        {comment.author_name.split(' ').map((name => name[0].toUpperCase())).join('')}
+                                    </Avatar>
+                                )
+                            }
+                            title={comment.author_name}
+                            subheader={<Moment locale='ru' fromNow>{comment.date}</Moment>}
+                            className={classes.cardHeader}
+                        />
+                        <CardContent className={classes.cardContent}>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                                {comment.text}
+                            </Typography>
+                        </CardContent>
+                    </Card>
+                )}
             </Popup>
         </Marker>
     );

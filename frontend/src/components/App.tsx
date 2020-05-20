@@ -2,6 +2,7 @@ import React from 'react';
 import {Provider}  from 'react-redux';
 import {Router, Switch, Route} from 'react-router-dom';
 import {ThemeProvider} from '@material-ui/core/styles';
+import 'moment/locale/ru';
 
 import {store} from '../store';
 import history from '../history';

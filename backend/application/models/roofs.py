@@ -1,7 +1,7 @@
 from functools import reduce
 from datetime import datetime
 from mongoengine import StringField, FloatField, PointField, \
-    ReferenceField, EmbeddedDocument, EmbeddedDocumentListField, DateField
+    ReferenceField, EmbeddedDocument, EmbeddedDocumentListField, DateTimeField
 from application import db
 from .users import User
 
@@ -10,7 +10,7 @@ class Comment(EmbeddedDocument):
     author = ReferenceField(User)
     rating = FloatField()
     text = StringField()
-    date = DateField(default=datetime.utcnow)
+    date = DateTimeField(default=datetime.utcnow)
 
 
 class Roof(db.Document):

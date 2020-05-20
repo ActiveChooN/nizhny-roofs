@@ -39,10 +39,11 @@ post_comment_parser.add_argument("text", type=str, location="json", store_missin
 # Models
 
 comment_model = roofs_ns.model("Roof Comment", {
-    "author_name": fields.String(attribute=lambda x: f"{x.author.first_name} {x.author.second_name or ''}".rstrip()),
+    "author_name": fields.String(attribute=lambda x: f"{x.author.first_name} {x.author.last_name     or ''}".rstrip()),
     "author_avatar": fields.String(attribute=lambda x: x.author.avatar),
     "rating": fields.Float,
     "text": fields.String,
+    "date": fields.String,
 })
 
 roof_model = roofs_ns.model("Roof", {
