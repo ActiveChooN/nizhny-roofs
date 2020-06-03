@@ -1,8 +1,8 @@
 import React from 'react';
 import {Redirect} from 'react-router-dom';
-import Container from '@material-ui/core/Container/Container';
-import Avatar from '@material-ui/core/Avatar/Avatar';
-import Typography from '@material-ui/core/Typography/Typography';
+import Container from '@material-ui/core/Container';
+import Avatar from '@material-ui/core/Avatar';
+import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 

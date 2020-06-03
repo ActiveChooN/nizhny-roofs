@@ -1,7 +1,7 @@
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
-import Alert from "@material-ui/lab/Alert/Alert";
-import Snackbar from "@material-ui/core/Snackbar/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 
 import {RootState} from '../../store';
 import {hideMessage} from '../../store/slices/alertMessage';

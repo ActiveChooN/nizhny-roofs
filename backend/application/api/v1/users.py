@@ -2,7 +2,7 @@ from flask_restx import Resource, Namespace, reqparse, fields, abort
 # noinspection PyProtectedMember
 from flask_restx._http import HTTPStatus
 from flask_restx.inputs import email
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, current_user
 from application.models import User as UserModel
 from .api_models import pagination_model
 from .parsers import paging_parser
@@ -74,7 +74,6 @@ class Users(Resource):
 
 # noinspection PyUnresolvedReferences
 @users_ns.route("/<user_id>")
-@users_ns.doc(params={"id": "A machine ID"})
 class User(Resource):
     @users_ns.marshal_with(user_model)
     @users_ns.response(HTTPStatus.NOT_FOUND,
@@ -100,4 +99,33 @@ class User(Resource):
         user.delete()
         return {
             "message": "User was successfully deleted."
+        }
+
+
+# noinspection PyUnresolvedReferences
+@users_ns.route("/<user_id>/follow")
+class UserFollow(Resource):
+    @users_ns.response(HTTPStatus.NOT_FOUND,
+                       HTTPStatus.NOT_FOUND.phrase)
+    def post(self, user_id):
+        user = UserModel.objects.get_or_404(id=user_id)
+        if user not in current_user.followed and user != current_user:
+            current_user.update(push__followed=user)
+        return {
+            "message": "User was successfully followed"
+        }
+
+
+# noinspection PyUnresolvedReferences
+@users_ns.route("/<user_id>/unfollow")
+class UserUnfollow(Resource):
+    @users_ns.response(HTTPStatus.NOT_FOUND,
+                       HTTPStatus.NOT_FOUND.phrase)
+    def post(self, user_id):
+        user = UserModel.objects.get_or_404(id=user_id)
+        if user not in current_user.followed:
+            abort(HTTPStatus.BAD_REQUEST, "Can not unfollow user that is not followed")
+        current_user.update(pull__followed=user)
+        return {
+            "message": "User was successfully unfollowed"
         }

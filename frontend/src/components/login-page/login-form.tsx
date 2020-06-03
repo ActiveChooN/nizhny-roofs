@@ -2,10 +2,10 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { Formik, Form, Field } from 'formik';
-import Button from '@material-ui/core/Button/Button';
-import Grid from '@material-ui/core/Grid/Grid';
-import Link from '@material-ui/core/Link/Link';
-import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Link from '@material-ui/core/Link';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import { TextField, CheckboxWithLabel } from 'formik-material-ui';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 

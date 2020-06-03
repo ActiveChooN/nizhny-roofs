@@ -47,6 +47,7 @@ const MapPage = () => {
                         title={el.name}
                         rating={el.rating}
                         key={el.id}
+                        imageURL={el.thumbnail}
                         comment={el.comments?.length && el.comments.slice(-1)[0]}
                     />
                 ))}

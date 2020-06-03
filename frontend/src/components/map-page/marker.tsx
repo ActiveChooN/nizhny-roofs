@@ -2,17 +2,17 @@ import React from 'react';
 import {Marker, Popup} from 'react-leaflet';
 import L from 'leaflet';
 import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography/Typography';
-import Grid from '@material-ui/core/Grid/Grid';
-import Button from '@material-ui/core/Button/Button';
-import Rating from '@material-ui/lab/Rating/Rating';
-import Card from '@material-ui/core/Card/Card';
-import CardHeader from '@material-ui/core/CardHeader/CardHeader';
-import CardContent from '@material-ui/core/CardContent/CardContent';
-import CardActions from '@material-ui/core/CardActions/CardActions';
-import Avatar from '@material-ui/core/Avatar/Avatar';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import Rating from '@material-ui/lab/Rating';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
+import Avatar from '@material-ui/core/Avatar';
 import Image from 'material-ui-image';
 import red from '@material-ui/core/colors/red';
+import grey from '@material-ui/core/colors/grey';
 import Moment from 'react-moment';
 import 'moment/locale/ru';
 
@@ -34,6 +34,7 @@ interface MarkerProps {
     title: string;
     description: string;
     rating?: number;
+    imageURL?: string,
     comment?: {
         author_name: string;
         author_avatar: string;
@@ -82,8 +83,17 @@ const useStyles = makeStyles((theme) => ({
         '& p': {
             margin: 0,
         },
+    },
+    commentCard: {
+        borderLeftWidth: theme.spacing(0.5),
+        borderLeftColor: grey[400],
+        borderLeftStyle: 'solid',
+        borderTopLeftRadius: 0,
+        borderBottomLeftRadius: 0,
+        marginTop: theme.spacing(1),
+        paddingLeft: theme.spacing(1),
     }
-}))
+}));
 
 const LeafletMarker = (props: MarkerProps): JSX.Element => {
     const {
@@ -94,6 +104,7 @@ const LeafletMarker = (props: MarkerProps): JSX.Element => {
         description,
         rating,
         comment,
+        imageURL,
     } = props;
 
     const classes = useStyles();
@@ -103,7 +114,7 @@ const LeafletMarker = (props: MarkerProps): JSX.Element => {
             <Popup className={classes.popup}>
                 <Grid container spacing={1}>
                     <Grid item className={classes.image}>
-                        <Image className={classes.img} src='/assets/old_building.jpg' />
+                        <Image className={classes.img} src={imageURL || '/assets/no_image.png'} />
                     </Grid>
                     <Grid item xs container direction='column' spacing={1}>
                         <Grid item xs>
@@ -127,7 +138,7 @@ const LeafletMarker = (props: MarkerProps): JSX.Element => {
                     </Grid>
                 </Grid>
                 { comment && (
-                    <Card elevation={0}>
+                    <Card elevation={0} className={classes.commentCard}>
                         <CardHeader
                             avatar={
                                 comment.author_avatar ? (

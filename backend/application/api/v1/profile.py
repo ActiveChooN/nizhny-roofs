@@ -1,11 +1,6 @@
-from flask_restx import Resource, Namespace, reqparse, fields, abort
-# noinspection PyProtectedMember
-from flask_restx._http import HTTPStatus
+from flask_restx import Resource, Namespace, reqparse, fields
 from flask_jwt_extended import jwt_required, current_user
 from werkzeug.datastructures import FileStorage
-from application.models import User as UserModel
-from .api_models import pagination_model
-from .parsers import paging_parser
 from .users import user_model, user_parser
 
 # Namespace
@@ -23,7 +18,18 @@ profile_parser.remove_argument("is_active")
 
 # Models
 
-#
+profile_model = profile_ns.model("Profile", {
+    "email": fields.String,
+    "first_name": fields.String,
+    "last_name": fields.String,
+    "avatar": fields.String(attribute=lambda x: x.avatar.url),
+    "followed": fields.List(fields.Nested({
+        "id": fields.String,
+        "first_name":  fields.String,
+        "last_name": fields.String,
+        "avatar": fields.String,
+    }))
+})
 
 # Resources
 
@@ -31,14 +37,14 @@ profile_parser.remove_argument("is_active")
 @profile_ns.route('')
 class UserProfile(Resource):
     @profile_ns.expect(profile_parser)
-    @profile_ns.marshal_with(user_model)
+    @profile_ns.marshal_with(profile_model)
     def patch(self):
         args = profile_parser.parse_args()
         current_user.update(**args)
         current_user.reload()
         return current_user
 
-    @profile_ns.marshal_with(user_model)
+    @profile_ns.marshal_with(profile_model)
     def get(self):
         return current_user
 

@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 from application import db
-from mongoengine import StringField, EmailField, BooleanField
+from mongoengine import StringField, EmailField, BooleanField, ReferenceField, ListField
 from flask_fs.mongo import ImageField
 from application import storages
 
@@ -11,6 +11,7 @@ class User(db.Document):
     last_name = StringField()
     password_hash = StringField(required=True)
     avatar = ImageField(fs=storages["avatars"], max_size=200)
+    followed = ListField(ReferenceField('self'))
     is_active = BooleanField(default=True)
     is_admin = BooleanField(default=False)
 

@@ -1,2 +1,3 @@
 from .users import User
-from .roofs import Roof
+from .roofs import Roof, RoofImage
+from .roofs import Comment

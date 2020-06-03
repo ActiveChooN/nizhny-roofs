@@ -44,7 +44,6 @@ def user_loader_callback(identity):
 def check_if_token_is_revoked(decrypted_token):
     jti = decrypted_token["jti"]
     entry = redis.get(jti)
-    print(entry)
     if entry is None:
         return False
     else:
