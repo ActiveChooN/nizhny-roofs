@@ -4,20 +4,20 @@ export const baseURL = process.env.REACT_APP_API_URL || '/api/v1'
 
 export const fetchInstance = (input: RequestInfo, init?: RequestInit | undefined): Promise<Response> =>
     typeof input === 'string' ? fetch(baseURL + input, {
-        ...init,
         headers: {
             'Content-Type': 'application/json',
             ...init?.headers,
         },
+        ...init,
     }) : fetch({
         ...input,
         url: baseURL + input.url,
     }, {
-        ...init,
         headers: {
             'Content-Type': 'application/json',
             ...init?.headers,
         },
+        ...init,
     })
 
 export const [useAuth, authFetch, login, logout] =

@@ -1,4 +1,5 @@
-import os, binascii
+import os
+import binascii
 from flask_restx import Resource, Namespace, reqparse, fields
 # noinspection PyProtectedMember
 from flask_restx._http import HTTPStatus

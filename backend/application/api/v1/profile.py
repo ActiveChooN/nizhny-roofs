@@ -1,3 +1,5 @@
+import os
+import binascii
 from flask_restx import Resource, Namespace, reqparse, fields
 from flask_jwt_extended import jwt_required, current_user
 from werkzeug.datastructures import FileStorage
@@ -54,8 +56,14 @@ class UserProfileAvatar(Resource):
     @profile_ns.expect(user_avatar_parser)
     def post(self):
         args = user_avatar_parser.parse_args()
+        print(args)
         avatar = args["avatar"]
-        current_user.avatar.save(avatar, overwrite=True)
+        avatar.filename = "{}.{}.{}".format(
+            '.'.join(avatar.filename.split('.')[:-1]),
+            binascii.b2a_hex(os.urandom(4)).decode(),
+            avatar.filename.split('.')[-1]
+        )
+        current_user.avatar.save(avatar)
         current_user.save()
         return {
             "message": "User profile avatar was successfully uploaded"

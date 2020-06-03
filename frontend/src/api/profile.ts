@@ -17,12 +17,20 @@ export const postAvatar = (file: File): Promise<any> => {
     return authFetch('/profile/avatar', {
         method: 'POST',
         body: formData,
+    }).then(async r => {
+        if (r.status !== 201) {
+            throw await r.json();
+        } else {
+            return r;
+        }
     })
 }
 
 export const patchProfile = (email?: string, firstName?: string, lastName?: string): Promise<any> => (
      authFetch('/profile', {
-         method: 'PATCH',
+         method: 'PATCH',headers: {
+             'Content-Type': 'application/json',
+         },
          body: JSON.stringify({
             'email': email,
             'first_name': firstName,
