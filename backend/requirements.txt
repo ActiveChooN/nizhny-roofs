@@ -1,7 +1,7 @@
 celery==4.4.2
 Flask==1.1.2
 Flask-Caching==1.8.0
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 flask-fs==0.6.1
 Flask-JWT-Extended==3.24.1
 Flask-Mail==0.9.1
